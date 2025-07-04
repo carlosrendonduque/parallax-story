@@ -8,10 +8,12 @@ import {
   NavBrand, 
   BrandText,
   NavLinks, 
-  NavLink 
+  NavLink,
+  StoryModeContainer,
+  DiscreteHamburger
 } from './Navigation.styles';
 
-const Navigation = () => {
+const Navigation = ({ storyMode = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -27,6 +29,32 @@ const Navigation = () => {
     return location.pathname === path;
   };
 
+  // Story mode - only show discrete hamburger
+  if (storyMode) {
+    return (
+      <>
+        <StoryModeContainer>
+          <DiscreteHamburger 
+            onClick={toggleMenu}
+            aria-label="Menu"
+            $isOpen={isMenuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </DiscreteHamburger>
+        </StoryModeContainer>
+        
+        <HamburgerMenu 
+          isOpen={isMenuOpen} 
+          onToggle={toggleMenu}
+          onClose={closeMenu}
+        />
+      </>
+    );
+  }
+
+  // Normal mode - full navigation
   return (
     <NavigationContainer>
       <NavContainer>

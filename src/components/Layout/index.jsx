@@ -11,14 +11,16 @@ import {
 const Layout = ({ children }) => {
   const location = useLocation();
   
-  // Hide navigation on story page for immersive experience
+  // Different navigation modes
   const isStoryPage = location.pathname === '/story';
   const isPermissionsPage = location.pathname === '/permissions';
   
   return (
     <LayoutContainer $isStoryMode={isStoryPage}>
-      {/* Show navigation only on non-story pages */}
-      {!isStoryPage && !isPermissionsPage && <Navigation />}
+      {/* Show different navigation based on page */}
+      {!isPermissionsPage && (
+        <Navigation storyMode={isStoryPage} />
+      )}
       
       {/* Main content area */}
       <MainContent $isStoryMode={isStoryPage}>

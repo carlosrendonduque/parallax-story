@@ -80,3 +80,68 @@ export const NavLink = styled.div`
     }
   `}
 `;
+
+/* Story Mode Styles - Discrete hamburger like Breathe */
+export const StoryModeContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+`;
+
+export const DiscreteHamburger = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+  
+  &:hover {
+    opacity: 1;
+  }
+  
+  /* Hamburger lines */
+  span {
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: #333;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+    
+    ${({ $isOpen }) => $isOpen && `
+      &:nth-child(1) {
+        transform: rotate(45deg) translate(4px, 4px);
+      }
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(4px, -4px);
+      }
+    `}
+  }
+  
+  @media (max-width: 768px) {
+    width: 20px;
+    height: 20px;
+    
+    span {
+      width: 14px;
+      height: 1px;
+    }
+  }
+`;
