@@ -99,50 +99,6 @@ const StoryText = ({ text, pageId }) => {
     }
   }, [text, pageId, getCurrentLocation, getCurrentWeather, getParallelWeather, currentTime, parallelTime, futureTime]);
 
-  // Highlight certain words for emphasis
-  const highlightWords = (text) => {
-    const wordsToHighlight = [
-      'dimensión paralela',
-      'inclinas',
-      'mueves',
-      'cámara',
-      'ubicación',
-      'tiempo',
-      'realidad',
-      'fantasmas',
-      'vibración',
-      'conexión',
-      'ondas dimensionales'
-    ];
-    
-    let highlightedText = text;
-    
-    wordsToHighlight.forEach(word => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi');
-      highlightedText = highlightedText.replace(regex, `<highlight>$&</highlight>`);
-    });
-    
-    return highlightedText;
-  };
-
-  // Split text into parts for highlighting
-  const renderTextWithHighlights = (text) => {
-    const parts = text.split('<highlight>');
-    
-    return parts.map((part, index) => {
-      if (part.includes('</highlight>')) {
-        const [highlighted, rest] = part.split('</highlight>');
-        return (
-          <React.Fragment key={index}>
-            <HighlightedText>{highlighted}</HighlightedText>
-            {rest}
-          </React.Fragment>
-        );
-      }
-      return part;
-    });
-  };
-
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -197,7 +153,7 @@ const StoryText = ({ text, pageId }) => {
         initial="hidden"
         animate="visible"
       >
-        {renderTextWithHighlights(highlightWords(displayedText))}
+        {displayedText}
         
         {/* Typing cursor */}
         {isAnimating && (

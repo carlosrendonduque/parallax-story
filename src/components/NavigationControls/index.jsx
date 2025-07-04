@@ -212,21 +212,20 @@ const NavigationControls = ({
             <SwipeHint
               as={motion.div}
               animate={{
-                x: [-10, 10, -10],
-                opacity: [0.6, 1, 0.6]
+                opacity: [0.4, 0.6, 0.4]
               }}
               transition={{
-                duration: 2,
+                duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
             >
-              👆 Desliza o toca las flechas
+              Desliza para navegar
             </SwipeHint>
             
             {/* Desktop keyboard hint */}
             <KeyboardHint>
-              ⌨️ Usa las flechas del teclado
+              Usa las flechas del teclado
             </KeyboardHint>
           </motion.div>
         )}

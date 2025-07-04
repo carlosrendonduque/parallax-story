@@ -30,32 +30,27 @@ export const ControlsContainer = styled.div`
 export const ProgressBar = styled.div`
   width: 100%;
   max-width: 300px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 1px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  margin-bottom: 10px;
   
   @media (max-width: 768px) {
     max-width: 250px;
-    height: 3px;
+    height: 2px;
   }
 `;
 
 export const ProgressFill = styled.div`
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #667eea 0%,
-    #764ba2 50%,
-    #FFD700 100%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 3s ease-in-out infinite;
-  border-radius: 2px;
+  background: #333;
+  border-radius: 1px;
+  transition: width 0.6s ease;
   
-  /* Glow effect */
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  @media (max-width: 768px) {
+    transition: width 0.4s ease;
+  }
 `;
 
 export const NavigationButton = styled.button`
@@ -145,34 +140,31 @@ export const TotalPages = styled.span`
 `;
 
 export const SwipeHint = styled.div`
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8rem;
   text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px 12px;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   
   @media (min-width: 769px) {
     display: none;
   }
   
   @media (max-width: 768px) {
-    font-size: 0.8rem;
-    padding: 6px 12px;
+    font-size: 0.75rem;
+    padding: 5px 10px;
   }
 `;
 
 export const KeyboardHint = styled.div`
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 0.75rem;
   text-align: center;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 6px 12px;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  animation: ${pulse} 3s ease-in-out infinite;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 4px 8px;
+  border-radius: 10px;
   
   @media (max-width: 768px) {
     display: none;

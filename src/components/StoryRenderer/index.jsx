@@ -26,7 +26,13 @@ const StoryRenderer = () => {
     isLastPage
   } = useStory();
   
-  const { getLocationData } = useLocation();
+  const { 
+    getLocationData,
+    currentTime,
+    parallelTime,
+    weather
+  } = useLocation();
+  
   const { orientation, getTiltTransform } = useDevice();
   const containerRef = useRef(null);
 
@@ -163,6 +169,31 @@ const StoryRenderer = () => {
       {/* Camera background - HIDDEN for now */}
       <div style={{ display: 'none' }}>
         <CameraView />
+      </div>
+      
+      {/* DEBUG: Context info for development */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '20px',
+        background: 'rgba(0,0,0,0.8)',
+        color: 'white',
+        padding: '10px',
+        borderRadius: '5px',
+        zIndex: 1000,
+        fontSize: '11px',
+        maxWidth: '200px'
+      }}>
+        <strong>DEBUG: Story Context</strong><br/>
+        Page: {currentPage + 1}/{totalPages}<br/>
+        Story ID: {currentStoryData.id}<br/>
+        <hr style={{margin: '5px 0', opacity: 0.3}}/>
+        📍 Location: {locationData?.address || 'Loading...'}<br/>
+        🕐 Time: {currentTime || 'Loading...'}<br/>
+        🌤️ Weather: {weather?.current || 'Loading...'}<br/>
+        <hr style={{margin: '5px 0', opacity: 0.3}}/>
+        🌀 Parallel Time: {parallelTime || 'N/A'}<br/>
+        ✨ Parallel Weather: {weather?.parallel || 'N/A'}
       </div>
       
       {/* Story overlay with content */}

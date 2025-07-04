@@ -148,7 +148,9 @@ export const LocationProvider = ({ children }) => {
   const [state, dispatch] = useReducer(locationReducer, initialState);
 
   // Función para solicitar permisos de ubicación
-  const requestLocationPermission = async () => {
+  const requestLocationPermission = useCallback(async () => {
+    if (state.isLoadingLocation) return; // Prevent multiple calls
+    
     dispatch({ type: LOCATION_ACTIONS.SET_LOADING_LOCATION, payload: true });
     
     try {
@@ -156,14 +158,16 @@ export const LocationProvider = ({ children }) => {
         throw new Error('Geolocalización no soportada');
       }
 
+      console.log('🔍 Requesting location permission...');
+
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           resolve,
           reject,
           {
             enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 60000
+            timeout: 15000, // 15 seconds
+            maximumAge: 30000 // 30 seconds cache
           }
         );
       });
@@ -173,47 +177,67 @@ export const LocationProvider = ({ children }) => {
         longitude: position.coords.longitude
       };
 
+      console.log('📍 Got coordinates:', coordinates);
+
       dispatch({ type: LOCATION_ACTIONS.SET_COORDINATES, payload: coordinates });
       dispatch({ type: LOCATION_ACTIONS.SET_LOCATION_PERMISSION, payload: true });
       
-      // Obtener dirección
+      // Obtener dirección real
       await reverseGeocode(coordinates);
       
-      // Simular clima basado en ubicación
+      // Simular clima basado en ubicación real
       await getWeatherData(coordinates);
       
     } catch (error) {
+      console.warn('Location permission error:', error.message);
       dispatch({ type: LOCATION_ACTIONS.SET_LOCATION_ERROR, payload: error.message });
       dispatch({ type: LOCATION_ACTIONS.SET_LOCATION_PERMISSION, payload: false });
       
-      // Usar datos simulados si falla
-      useSimulatedData();
+      // Keep simulated data - don't override
+      console.log('📍 Keeping simulated data');
     } finally {
       dispatch({ type: LOCATION_ACTIONS.SET_LOADING_LOCATION, payload: false });
     }
-  };
+  }, [state.isLoadingLocation]);
 
-  // Geocodificación inversa (simulada)
+  // Geocodificación inversa (usando Nominatim - OpenStreetMap)
   const reverseGeocode = async (coordinates) => {
     try {
-      // En producción, usarías una API real como Google Maps o Nominatim
-      // Por ahora simulamos con datos aleatorios
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay de API
-      
-      const mockAddress = MOCK_LOCATIONS[Math.floor(Math.random() * MOCK_LOCATIONS.length)];
-      
-      dispatch({
-        type: LOCATION_ACTIONS.SET_ADDRESS,
-        payload: {
-          address: mockAddress,
-          city: 'Brisbane',
-          country: 'Australia'
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coordinates.latitude}&lon=${coordinates.longitude}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'ParallaxStory/1.0'
+          }
         }
-      });
+      );
+      
+      const data = await response.json();
+      
+      if (data && data.address) {
+        const address = data.address;
+        const street = address.road || address.street || address.pedestrian || 'Calle desconocida';
+        const houseNumber = address.house_number ? `${address.house_number} ` : '';
+        const fullAddress = `${houseNumber}${street}`;
+        
+        dispatch({
+          type: LOCATION_ACTIONS.SET_ADDRESS,
+          payload: {
+            address: fullAddress,
+            city: address.city || address.town || address.village || 'Ciudad desconocida',
+            country: address.country || 'País desconocido'
+          }
+        });
+        
+        console.log('📍 Real location obtained:', fullAddress);
+      } else {
+        throw new Error('No address data received');
+      }
       
     } catch (error) {
-      console.warn('Error en geocodificación:', error);
-      useSimulatedData();
+      console.warn('Error en geocodificación real:', error);
+      // Keep simulated data if real geocoding fails
+      console.log('📍 Using simulated location data');
     }
   };
 
@@ -276,22 +300,25 @@ export const LocationProvider = ({ children }) => {
     // Tiempo actual
     const currentTime = now.toLocaleTimeString('es-ES', { 
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit',
+      second: '2-digit' // Agregar segundos para ver que se actualiza
     });
     
-    // Tiempo paralelo (diferencia aleatoria de -6 a +6 horas)
-    const parallelOffset = (Math.random() * 12 - 6) * 60 * 60 * 1000;
-    const parallelDate = new Date(now.getTime() + parallelOffset);
+    // Tiempo paralelo (diferencia aleatoria de -6 a +6 horas, pero consistente)
+    const seed = Math.floor(Date.now() / (24 * 60 * 60 * 1000)); // Cambia una vez por día
+    const randomOffset = ((seed % 13) - 6) * 60 * 60 * 1000; // -6 a +6 horas
+    const parallelDate = new Date(now.getTime() + randomOffset);
     const parallelTime = parallelDate.toLocaleTimeString('es-ES', { 
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit',
+      second: '2-digit'
     });
     
     // Tiempo futuro (30 minutos adelante)
     const futureDate = new Date(now.getTime() + 30 * 60 * 1000);
     const futureTime = futureDate.toLocaleTimeString('es-ES', { 
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit'
     });
     
     dispatch({
@@ -313,9 +340,23 @@ export const LocationProvider = ({ children }) => {
 
   // Effect para solicitar ubicación automáticamente al cargar
   useEffect(() => {
-    // Iniciar con datos simulados inmediatamente
+    let isMounted = true;
+    
+    // Primero usar datos simulados inmediatamente
     useSimulatedData();
-  }, [useSimulatedData]);
+    
+    // Luego intentar obtener ubicación real (solo una vez)
+    const timer = setTimeout(() => {
+      if (isMounted && !state.hasLocationPermission && !state.isLoadingLocation) {
+        requestLocationPermission();
+      }
+    }, 2000);
+    
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, []); // Empty dependency array to run only once
 
   // Funciones de utilidad
   const getCurrentLocation = () => {
