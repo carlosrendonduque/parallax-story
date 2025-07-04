@@ -14,22 +14,17 @@ export const TextContainer = styled.div`
 `;
 
 export const TextContent = styled.div`
-  font-size: clamp(1.2rem, 5vw, 1.6rem);
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
   line-height: 1.6;
-  color: white;
+  color: #333; /* Gris oscuro, más suave que negro puro */
   text-align: center;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
   font-weight: 300;
-  letter-spacing: 0.5px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 30px;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
+  letter-spacing: 0.3px;
+  font-family: 'Georgia', serif;
   width: 100%;
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 60px 30px;
   
   /* Smooth text rendering */
   -webkit-font-smoothing: antialiased;
@@ -38,10 +33,9 @@ export const TextContent = styled.div`
   /* Better readability on mobile */
   @media (max-width: 768px) {
     line-height: 1.5;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 1);
-    padding: 25px 20px;
-    font-size: clamp(1rem, 4vw, 1.3rem);
-    min-height: 100px;
+    padding: 40px 20px;
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    max-width: 90%;
   }
   
   /* Handle long words on small screens */

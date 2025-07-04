@@ -160,24 +160,9 @@ const StoryRenderer = () => {
 
   return (
     <RendererContainer ref={containerRef}>
-      {/* Camera background */}
-      <CameraView />
-      
-      {/* DEBUG: Test overlay to verify rendering */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        background: 'rgba(255,0,0,0.8)',
-        color: 'white',
-        padding: '10px',
-        borderRadius: '5px',
-        zIndex: 1000,
-        fontSize: '12px'
-      }}>
-        DEBUG: StoryRenderer Active<br/>
-        Page: {currentPage + 1}/{totalPages}<br/>
-        Story ID: {currentStoryData.id}
+      {/* Camera background - HIDDEN for now */}
+      <div style={{ display: 'none' }}>
+        <CameraView />
       </div>
       
       {/* Story overlay with content */}
@@ -190,9 +175,6 @@ const StoryRenderer = () => {
           animate="animate"
           exit="exit"
         >
-          {/* Contextual information */}
-          <ContextualInfo />
-          
           {/* Main story content */}
           <StoryContent>
             <ContentWrapper

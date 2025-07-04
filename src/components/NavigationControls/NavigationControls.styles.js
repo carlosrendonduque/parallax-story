@@ -59,17 +59,16 @@ export const ProgressFill = styled.div`
 `;
 
 export const NavigationButton = styled.button`
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #333;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   cursor: ${({ $isDisabled }) => $isDisabled ? 'not-allowed' : 'pointer'};
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: normal;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,12 +80,15 @@ export const NavigationButton = styled.button`
     pointer-events: none;
   `}
   
-  /* Active state glow */
+  /* Hover state */
   ${({ $isDisabled }) => !$isDisabled && `
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    
     &:active {
-      box-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.3),
-        inset 0 0 10px rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.15);
     }
   `}
   
@@ -95,71 +97,50 @@ export const NavigationButton = styled.button`
     height: 45px;
     font-size: 1rem;
   }
-  
-  /* Ripple effect */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease;
-  }
-  
-  &:active::before {
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 export const PageIndicator = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 12px 20px;
-  border-radius: 25px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   
   @media (max-width: 768px) {
-    padding: 10px 16px;
+    padding: 6px 12px;
     gap: 6px;
   }
 `;
 
 export const CurrentPage = styled.span`
-  color: #FFD700;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  color: #333;
+  font-weight: 500;
+  font-size: 1rem;
   
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 `;
 
 export const Separator = styled.span`
-  color: rgba(255, 255, 255, 0.6);
+  color: #666;
   font-weight: 300;
-  font-size: 1rem;
+  font-size: 0.9rem;
   
   @media (max-width: 768px) {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 `;
 
 export const TotalPages = styled.span`
-  color: rgba(255, 255, 255, 0.8);
+  color: #666;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.9rem;
   
   @media (max-width: 768px) {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 `;
 

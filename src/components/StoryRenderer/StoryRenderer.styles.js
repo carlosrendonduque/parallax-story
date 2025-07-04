@@ -6,7 +6,7 @@ export const RendererContainer = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #000;
+  background: #fafafa; /* Blanco cálido, no puro */
   transition: transform 0.3s ease;
   
   /* Prevent text selection */
@@ -17,11 +17,6 @@ export const RendererContainer = styled.div`
   
   /* Prevent context menu on long press */
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 `;
 
 export const StoryOverlay = styled.div`
@@ -30,12 +25,6 @@ export const StoryOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
   display: flex;
   flex-direction: column;
   justify-content: space-between;
